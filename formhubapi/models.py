@@ -80,6 +80,18 @@ class UserFactory(object):
             user.__name__ = key
             return user
 
+class FormFactory(object):
+    def __getitem__(self, key):
+        try:
+            form = Form.query().filter_by(
+                user=self.__parent__, id_string=key).one()
+        except NoResultFound as e:
+            raise KeyError
+        else:
+            form.__parent__ = self
+            form.__name__ = key
+            return form
+
 
 class User(Base):
     __tablename__ = 'auth_user'
@@ -94,16 +106,13 @@ class User(Base):
     is_superuser = Column(Boolean)
     last_login = Column(DateTime)
     date_joined = Column(DateTime)
+    factories = {'form': FormFactory}
 
     def __getitem__(self, key):
-        try:
-            form = Form.query().filter_by(user=self, id_string=key).one()
-        except NoResultFound as e:
-            raise KeyError
-        else:
-            form.__parent__ = self
-            form.__name__ = key
-            return form
+        factory = self.factories[key]()
+        factory.__parent__ = self
+        factory.__name__ = key
+        return factory
 
 class Form(Base):
     __tablename__ = 'odk_logger_xform'

@@ -19,9 +19,10 @@ def main(global_config, **settings):
     DBSession.configure(bind=engine)
     Base.metadata.bind = engine
     config = Configurator(settings=settings)
-    session_factory = UnencryptedCookieSessionFactoryConfig(settings['session_key'])
+    session_factory = UnencryptedCookieSessionFactoryConfig(
+        settings['session_key'])
     authentication_policy = AuthTktAuthenticationPolicy(
-        'ahah16Fmaa6KiKabC66', callback=group_finder)
+        settings['auth_key'], callback=group_finder)
     authorization_policy = ACLAuthorizationPolicy()
     config.set_authentication_policy(authentication_policy)
     config.set_authorization_policy(authorization_policy)

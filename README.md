@@ -13,5 +13,7 @@ Getting Started
 
 - open development.ini in your favourite editor and update the database url to point to your formhub database
 
+- open development.ini and set random characters to session_key and auth_key
+
 - $venv/bin/pserve development.ini
 
