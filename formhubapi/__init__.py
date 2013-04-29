@@ -1,6 +1,7 @@
 from pyramid.config import Configurator
 from sqlalchemy import engine_from_config
-from pyramid.authentication import AuthTktAuthenticationPolicy
+from pyramid.authentication import AuthTktAuthenticationPolicy,\
+    BasicAuthAuthenticationPolicy
 from pyramid.authorization import ACLAuthorizationPolicy
 from pyramid.session import UnencryptedCookieSessionFactoryConfig
 
@@ -10,6 +11,8 @@ from .models import (
     group_finder,
     UserFactory
     )
+
+from security import check_login
 
 
 def main(global_config, **settings):
@@ -23,8 +26,9 @@ def main(global_config, **settings):
         settings['session_key'])
     authentication_policy = AuthTktAuthenticationPolicy(
         settings['auth_key'], callback=group_finder)
+    basic_auth_policy = BasicAuthAuthenticationPolicy(check_login, debug=True)
     authorization_policy = ACLAuthorizationPolicy()
-    config.set_authentication_policy(authentication_policy)
+    config.set_authentication_policy(basic_auth_policy)
     config.set_authorization_policy(authorization_policy)
     includeme(config)
     return config.make_wsgi_app()
@@ -32,6 +36,7 @@ def main(global_config, **settings):
 def includeme(config):
     config.add_static_view('static', 'static', cache_max_age=3600)
     # url matched routes
+    config.add_route('logout', '/logout')
     config.add_route('favicon', '/favicon.ico')
     # traversed routes
     config.add_route(

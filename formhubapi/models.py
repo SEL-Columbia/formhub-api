@@ -50,13 +50,11 @@ def group_finder(user_id, request):
     try:
         user = User.query().filter_by(id=user_id).one()
     except NoResultFound:
-        logger.error("User with id '%s' NOT found by group finder." % user_id)
+        pass
     else:
         groups = []#"g:%s" % g.name for g in user.groups]
         # add u: based permission
         groups.append('u:%d' % user.id)
-        logger.info(
-            "Found groups %s. for user with id '%s'" % (groups, user_id))
         return groups
     return []
 
@@ -113,6 +111,13 @@ class User(Base):
         factory.__parent__ = self
         factory.__name__ = key
         return factory
+
+    @property
+    def __acl__(self):
+        return [
+            (Allow, 'u:%d' % self.id, 'view'),
+            ]
+
 
 class Form(Base):
     __tablename__ = 'odk_logger_xform'
