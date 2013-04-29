@@ -1,4 +1,7 @@
 *.py[cod]
+development.ini
+production.ini
+test.ini
 
 # C extensions
 *.so

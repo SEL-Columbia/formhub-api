@@ -1,4 +1,14 @@
-formhub-api
-===========
+formhub-api README
+==================
 
-API server for formhub meant to be used by external clients.
+Getting Started
+---------------
+
+- cd <directory containing this file>
+
+- $venv/bin/python setup.py develop
+
+- $venv/bin/initialize_formhub-api_db development.ini
+
+- $venv/bin/pserve development.ini
+
