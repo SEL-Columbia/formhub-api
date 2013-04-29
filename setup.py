@@ -3,7 +3,7 @@ import os
 from setuptools import setup, find_packages
 
 here = os.path.abspath(os.path.dirname(__file__))
-README = open(os.path.join(here, 'README.txt')).read()
+README = open(os.path.join(here, 'README.md')).read()
 CHANGES = open(os.path.join(here, 'CHANGES.txt')).read()
 
 requires = [
@@ -14,10 +14,11 @@ requires = [
     'pyramid_debugtoolbar',
     'zope.sqlalchemy',
     'waitress',
+    'MySQL-python'
     ]
 
 setup(name='formhub-api',
-      version='0.0',
+      version='0.1',
       description='formhub-api',
       long_description=README + '\n\n' + CHANGES,
       classifiers=[
