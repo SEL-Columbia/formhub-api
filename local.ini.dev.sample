@@ -1,0 +1,45 @@
+###
+# app configuration
+# http://docs.pylonsproject.org/projects/pyramid/en/latest/narr/environment.html
+###
+
+[app:myapp]
+use = egg:formhub-api#main
+
+pyramid.reload_templates = true
+pyramid.debug_authorization = false
+pyramid.debug_notfound = false
+pyramid.debug_routematch = false
+pyramid.default_locale_name = en
+pyramid.includes =
+    pyramid_debugtoolbar
+    pyramid_tm
+
+#sqlalchemy.url = sqlite:///%(here)s/formhub-api.sqlite
+sqlalchemy.url = mysql://root:@localhost/formhub
+
+# session key
+session_key =
+auth_key =
+fh_secret_key =
+
+# By default, the toolbar only appears for clients from IP addresses
+# '127.0.0.1' and '::1'.
+# debugtoolbar.hosts = 127.0.0.1 ::1
+
+###
+# CORS
+###
+
+[pipeline:main]
+pipeline =
+    cors
+    myapp
+
+[filter:cors]
+use = egg:wsgicors#middleware
+policy=free
+free_origin=copy
+free_headers=*
+free_methods=*
+free_maxage=180
